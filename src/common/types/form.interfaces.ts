@@ -18,5 +18,6 @@ export interface IFormDataProps {
 }
 
 export interface IFormBaseProps {
+  value?: string;
   form: UseFormReturnType<any>;
 }

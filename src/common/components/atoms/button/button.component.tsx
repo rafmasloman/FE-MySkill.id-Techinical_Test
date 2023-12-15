@@ -22,7 +22,7 @@ const Button = ({
       leftSection={leftIcon}
       disabled={disable}
       bg={bg}
-      className="h-[48px]"
+      className="w-full lg:w-fit lg:h-[48px]"
     >
       {text}
     </ButtonMantine>

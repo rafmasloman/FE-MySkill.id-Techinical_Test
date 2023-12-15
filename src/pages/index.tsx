@@ -25,6 +25,7 @@ import { IconPlus } from '@tabler/icons-react';
 import { Dropzone, MIME_TYPES } from '@mantine/dropzone';
 import dropzone_styles from './';
 import ICAttach from '@/assets/icons/attachment.icon';
+import ImageUploader from '@/common/components/molecul/dropzone/fileupload.dropzone.component';
 
 const inter = Inter({ subsets: ['latin'] });
 const poppins = Poppins({
@@ -50,11 +51,11 @@ export default function Home() {
     <main
       className={`flex bg-white-primary min-h-screen flex-col items-center justify-between p-4 lg:p-24 ${inter.className}`}
     >
-      <Container size={'100%'}>
+      <Container size={'100%'} className="relative">
         <SimpleGrid cols={{ base: 1, md: 2 }} className="w-full">
           <form onSubmit={form.onSubmit((values) => console.log(values))}>
             <Stack>
-              <Group>
+              <Group className="lg:absolute lg:-top-16 ">
                 <Button
                   text="Add Portfolio"
                   variant="outline"
@@ -79,50 +80,22 @@ export default function Home() {
                 icon={<ICMinimize size="15" />}
                 height="fit-content"
               >
-                <Dropzone
-                  accept={[MIME_TYPES.png, MIME_TYPES.jpeg, MIME_TYPES.mp4]}
+                <ImageUploader
+                  form={form}
+                  value="backgroundImage"
                   onDrop={() => {}}
-                  styles={{
-                    root: {
-                      height: 200,
-                      backgroundColor: COLORS.DROPZONE_BG,
-                      display: 'flex',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                    },
-                  }}
-                  {...form.getInputProps('backgroundImage')}
-                >
-                  <div className=" h-fit flex flex-col items-center gap-1">
-                    <ICAttach size="24" />
-                    <Text
-                      ta="center"
-                      className="font-medium font-poppins underline text-dropzone-gray-text"
-                    >
-                      Drag and drop files, or{' '}
-                      <span className="text-blue-500">Browse</span>
-                    </Text>
-                    <Text
-                      ta="center"
-                      className=" font-poppins underline  text-sm text-[#9F9F9F]"
-                    >
-                      Support formats : png, jpg, jpeg, mp4.
-                    </Text>
-
-                    <Text
-                      ta="center"
-                      className=" font-poppins underline  text-sm text-[#9F9F9F]"
-                    >
-                      Max size : 500Mb
-                    </Text>
-                  </div>
-                </Dropzone>
+                  fileTypes={[MIME_TYPES.png, MIME_TYPES.jpeg, MIME_TYPES.mp4]}
+                />
               </Section>
 
-              <Section
-                title="Profile Image"
-                icon={<ICMinimize size="15" />}
-              ></Section>
+              <Section title="Profile Image" icon={<ICMinimize size="15" />}>
+                <ImageUploader
+                  form={form}
+                  value="profileImage"
+                  onDrop={() => {}}
+                  fileTypes={[MIME_TYPES.png, MIME_TYPES.jpeg, MIME_TYPES.mp4]}
+                />
+              </Section>
 
               <Section title="Profile" icon={<ICMinimize size="15" />}>
                 <ProfileForm form={form} />
@@ -141,13 +114,21 @@ export default function Home() {
               className="rounded-t-xl"
             />
 
-            <Stack className="px-16">
-              <Stack align="center" mt={-100}>
-                <Avatar src={PROFILE_IMG.src} size={150} />
+            <Stack className="px-4 lg:px-16">
+              <Stack align="center" className="-mt-[50px] lg:-mt-[100px]">
+                <Avatar
+                  src={PROFILE_IMG.src}
+                  className="w-[70px] h-[70px] lg:w-[150px] lg:h-[150px]"
+                />
 
                 <Stack justify="center" align="center" gap={0}>
-                  <Title className="text-black-primary">Nama</Title>
-                  <Title order={3} className="text-gray-primary">
+                  <Title className="text-black-primary text-xl lg:text-2xl">
+                    Nama
+                  </Title>
+                  <Title
+                    order={3}
+                    className="text-gray-primary text-base lg:text-xl"
+                  >
                     Title
                   </Title>
                   <Text ta={'center'} className="text-black-primary text-sm">
