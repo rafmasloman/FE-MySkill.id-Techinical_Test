@@ -6,4 +6,5 @@ export interface ISectionMainTypes {
   children?: ReactNode;
   width?: string;
   height?: string;
+  isMinimize?: boolean;
 }

@@ -26,6 +26,7 @@ import { Dropzone, MIME_TYPES } from '@mantine/dropzone';
 import dropzone_styles from './';
 import ICAttach from '@/assets/icons/attachment.icon';
 import ImageUploader from '@/common/components/molecul/dropzone/fileupload.dropzone.component';
+import { useState } from 'react';
 
 const inter = Inter({ subsets: ['latin'] });
 const poppins = Poppins({
@@ -34,18 +35,37 @@ const poppins = Poppins({
 });
 
 export default function Home() {
+  const [portfolioSection, setPortfolioSection] = useState([{ id: 1 }]);
+  const [storeData, setStoreData] = useState<any>({});
+
+  const handleAddPortfolioSection = () => {
+    setPortfolioSection((prevSections) => [
+      ...prevSections,
+      { id: prevSections.length + 1 },
+    ]);
+  };
+
   const form = useForm<IFormDataProps>({
-    initialValues: {
-      portfolioName: '',
-      company: '',
-      portfolioPosition: '',
-      portfolioDescription: '',
-      backgroundImage: '',
-      profileImage: '',
-      startedDate: new Date(),
-      endDate: new Date(),
-    },
+    // initialValues: {
+    //   portfolioName: '',
+    //   company: '',
+    //   portfolioPosition: '',
+    //   portfolioDescription: '',
+    //   backgroundImage: '',
+    //   profileImage: '',
+    //   startedDate: new Date(),
+    //   endDate: new Date(),
+    // },
   });
+
+  const storeDataToLocal = form.onSubmit((values) => {
+    localStorage.setItem('userData', JSON.stringify(values));
+    setStoreData(localStorage.setItem('userData', JSON.stringify(values)));
+  });
+
+  // const getData = localStorage.getItem('userData');
+
+  console.log('data : ', storeData);
 
   return (
     <main
@@ -53,7 +73,7 @@ export default function Home() {
     >
       <Container size={'100%'} className="relative">
         <SimpleGrid cols={{ base: 1, md: 2 }} className="w-full">
-          <form onSubmit={form.onSubmit((values) => console.log(values))}>
+          <form onSubmit={storeDataToLocal}>
             <Stack>
               <Group className="lg:absolute lg:-top-16 ">
                 <Button
@@ -64,22 +84,20 @@ export default function Home() {
                   radius="md"
                   disable={false}
                   bg="white"
-                  type="submit"
+                  onClick={handleAddPortfolioSection}
+
+                  // type="submit"
                 />
                 <Button
                   text="Simpan Perubahan"
                   variant="filled"
                   radius="md"
-                  disable={true}
+                  type="submit"
                   bg={COLORS.DISABLE_COLOR}
                 />
               </Group>
 
-              <Section
-                title="Background Image"
-                icon={<ICMinimize size="15" />}
-                height="fit-content"
-              >
+              <Section title="Background Image" icon={<ICMinimize size="15" />}>
                 <ImageUploader
                   form={form}
                   value="backgroundImage"
@@ -101,9 +119,17 @@ export default function Home() {
                 <ProfileForm form={form} />
               </Section>
 
-              <Section title="Portfolio 1" icon={<ICMinimize size="15" />}>
-                <PortfolioForm form={form} />
-              </Section>
+              {portfolioSection.map((portfolio) => {
+                return (
+                  <Section
+                    key={portfolio.id}
+                    title={`Portfolio ${portfolio.id}`}
+                    icon={<ICMinimize size="15" />}
+                  >
+                    <PortfolioForm form={form} sectionId={portfolio.id} />
+                  </Section>
+                );
+              })}
             </Stack>
           </form>
 

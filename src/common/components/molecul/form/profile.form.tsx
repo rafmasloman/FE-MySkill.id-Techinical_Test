@@ -8,14 +8,14 @@ import { useForm } from '@mantine/form';
 const ProfileForm = ({ form }: IFormBaseProps) => {
   return (
     <Stack gap={20}>
-      <TextInput placeholder="Name" {...form.getInputProps('profileName')} />
+      <TextInput placeholder="Name" {...form?.getInputProps('profileName')} />
       <TextInput
         placeholder="Title/Posisi"
-        {...form.getInputProps('profilePosition')}
+        {...form?.getInputProps('profilePosition')}
       />
       <Textarea
         placeholder="Deskripsi"
-        {...form.getInputProps('profileDescription')}
+        {...form?.getInputProps('profileDescription')}
         styles={{
           input: {
             height: 128,

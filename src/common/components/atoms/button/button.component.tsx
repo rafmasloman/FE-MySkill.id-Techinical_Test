@@ -11,6 +11,7 @@ const Button = ({
   leftIcon,
   disable,
   bg,
+  onClick,
 }: IButtonProps) => {
   return (
     <ButtonMantine
@@ -22,6 +23,7 @@ const Button = ({
       leftSection={leftIcon}
       disabled={disable}
       bg={bg}
+      onClick={onClick}
       className="w-full lg:w-fit lg:h-[48px]"
     >
       {text}

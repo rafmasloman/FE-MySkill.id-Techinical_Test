@@ -10,4 +10,5 @@ export interface IButtonProps {
   leftIcon?: ReactNode;
   disable?: boolean;
   bg?: string;
+  onClick?: () => void;
 }
