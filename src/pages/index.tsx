@@ -26,7 +26,8 @@ import { Dropzone, MIME_TYPES } from '@mantine/dropzone';
 import dropzone_styles from './';
 import ICAttach from '@/assets/icons/attachment.icon';
 import ImageUploader from '@/common/components/molecul/dropzone/fileupload.dropzone.component';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { InferGetServerSidePropsType } from 'next';
 
 const inter = Inter({ subsets: ['latin'] });
 const poppins = Poppins({
@@ -34,9 +35,17 @@ const poppins = Poppins({
   weight: ['400', '500', '600', '700'],
 });
 
-export default function Home() {
+async function getServerSideProps() {
+  const data = localStorage.getItem('userData');
+
+  return { props: { data } };
+}
+
+export default function Home({
+  data,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const [portfolioSection, setPortfolioSection] = useState([{ id: 1 }]);
-  const [storeData, setStoreData] = useState<any>({});
+  const [storeData, setStoreData] = useState<any>([]);
 
   const handleAddPortfolioSection = () => {
     setPortfolioSection((prevSections) => [
@@ -45,27 +54,43 @@ export default function Home() {
     ]);
   };
 
-  const form = useForm<IFormDataProps>({
-    // initialValues: {
-    //   portfolioName: '',
-    //   company: '',
-    //   portfolioPosition: '',
-    //   portfolioDescription: '',
-    //   backgroundImage: '',
-    //   profileImage: '',
-    //   startedDate: new Date(),
-    //   endDate: new Date(),
-    // },
+  const form = useForm<any>({
+    initialValues: {
+      profileName: '',
+      profileImage: '',
+      profileDescription: '',
+      portfolios: [
+        {
+          portfolioName: '',
+          company: '',
+          portfolioPosition: '',
+          startedDate: new Date(),
+          endDate: new Date(),
+          portfolioDescription: '',
+        },
+      ],
+      backgroundImage: '',
+    },
   });
+
+  useEffect(() => {
+    const datas = localStorage.getItem('userData');
+    // console.log('datas : ', form.values);
+  }, []);
 
   const storeDataToLocal = form.onSubmit((values) => {
-    localStorage.setItem('userData', JSON.stringify(values));
-    setStoreData(localStorage.setItem('userData', JSON.stringify(values)));
+    console.log(values);
+
+    setStoreData(values);
+
+    if (storeData !== null) {
+      console.log('store data : ', storeData);
+
+      localStorage.setItem('userData', JSON.stringify(storeData));
+    }
   });
 
-  // const getData = localStorage.getItem('userData');
-
-  console.log('data : ', storeData);
+  // console.log('data : ', storeData);
 
   return (
     <main
